@@ -1,0 +1,70 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - secrets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - database.pandarocks.de
+  resources:
+  - postgresdatabases
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - database.pandarocks.de
+  resources:
+  - postgresdatabases/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - database.pandarocks.de
+  resources:
+  - postgresdatabases/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - database.pandarocks.de
+  resources:
+  - postgresusers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - database.pandarocks.de
+  resources:
+  - postgresusers/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - database.pandarocks.de
+  resources:
+  - postgresusers/status
+  verbs:
+  - get
+  - patch
+  - update

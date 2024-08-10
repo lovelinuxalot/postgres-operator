@@ -1,0 +1,145 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.15.0
+  name: postgresusers.database.pandarocks.de
+spec:
+  group: database.pandarocks.de
+  names:
+    kind: PostgresUser
+    listKind: PostgresUserList
+    plural: postgresusers
+    singular: postgresuser
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: PostgresUser is the Schema for the postgresusers API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: PostgresUserSpec defines the desired state of PostgresUser
+            properties:
+              databaseRef:
+                description: The reference to the PostgresDatabase resource this user
+                  should be associated with
+                properties:
+                  name:
+                    default: ""
+                    description: |-
+                      Name of the referent.
+                      This field is effectively required, but due to backwards compatibility is
+                      allowed to be empty. Instances of this type with an empty value here are
+                      almost certainly wrong.
+                      TODO: Add other useful fields. apiVersion, kind, uid?
+                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                      TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
+                    type: string
+                type: object
+                x-kubernetes-map-type: atomic
+              dropOnDelete:
+                description: Whether to drop the user from the database when the PostgresUser
+                  resource is deleted
+                type: boolean
+              password:
+                description: The password for the user, if empty a password will be
+                  generated
+                type: string
+              passwordSpec:
+                description: Specification for generating a password if Password is
+                  empty
+                properties:
+                  alphabets:
+                    type: boolean
+                  alphabetsOverride:
+                    type: string
+                  length:
+                    type: integer
+                  numbers:
+                    type: boolean
+                  numbersOverride:
+                    type: string
+                  symbols:
+                    type: boolean
+                  symbolsOverride:
+                    type: string
+                required:
+                - alphabets
+                - length
+                - numbers
+                - symbols
+                type: object
+              roleType:
+                type: string
+              secretName:
+                description: The name of the secret where the user credentials will
+                  be stored
+                type: string
+              secretTemplate:
+                description: Template for configuring the secret
+                properties:
+                  annotations:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  labels:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  name:
+                    type: string
+                  namespace:
+                    type: string
+                  templateData:
+                    type: string
+                required:
+                - name
+                type: object
+              username:
+                description: The name of the user to be created
+                type: string
+            required:
+            - databaseRef
+            - roleType
+            - username
+            type: object
+          status:
+            description: PostgresUserStatus defines the observed state of PostgresUser
+            properties:
+              created:
+                description: Indicates whether the user has been successfully created
+                type: boolean
+              message:
+                description: Any additional message regarding the user's status
+                type: string
+              secretName:
+                type: string
+              secretNamespace:
+                type: string
+            required:
+            - created
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

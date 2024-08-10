@@ -1,0 +1,27 @@
+# permissions for end users to edit postgresdatabases.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: postgres-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: postgresdatabase-editor-role
+rules:
+- apiGroups:
+  - database.pandarocks.de
+  resources:
+  - postgresdatabases
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - database.pandarocks.de
+  resources:
+  - postgresdatabases/status
+  verbs:
+  - get

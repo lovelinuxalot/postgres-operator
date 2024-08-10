@@ -1,0 +1,79 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.15.0
+  name: postgresdatabases.database.pandarocks.de
+spec:
+  group: database.pandarocks.de
+  names:
+    kind: PostgresDatabase
+    listKind: PostgresDatabaseList
+    plural: postgresdatabases
+    singular: postgresdatabase
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: PostgresDatabase is the Schema for the postgresdatabases API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: PostgresDatabaseSpec defines the desired state of PostgresDatabase
+            properties:
+              dropOnDelete:
+                type: boolean
+              serverSecretRef:
+                description: |-
+                  SecretReference represents a Secret Reference. It has enough information to retrieve secret
+                  in any namespace
+                properties:
+                  name:
+                    description: name is unique within a namespace to reference a
+                      secret resource.
+                    type: string
+                  namespace:
+                    description: namespace defines the space within which the secret
+                      name must be unique.
+                    type: string
+                type: object
+                x-kubernetes-map-type: atomic
+            required:
+            - serverSecretRef
+            type: object
+          status:
+            description: PostgresDatabaseStatus defines the observed state of PostgresDatabase
+            properties:
+              created:
+                description: |-
+                  INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
+                  Important: Run "make" to regenerate code after modifying this file
+                type: boolean
+              message:
+                type: string
+            required:
+            - created
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
